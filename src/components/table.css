@@ -1,22 +1,22 @@
-table{
-	width: 750px; 
-	border-collapse: collapse; 
-	margin:50px auto;
-  }
+table {
+  border-collapse: collapse;
+  margin: 50px auto;
+  width: 750px;
+}
 
-tr:nth-of-type(odd) { 
-	background: #eee; 
-	}
+tr:nth-of-type( odd ) {
+  background: #eee;
+}
 
-th { 
-    background: #3498db; 
-    color: white; 
-    font-weight: bold; 
-    }
+th {
+  background: #3498db;
+  color: white;
+  font-weight: 700;
+}
 
-td, th { 
-    padding: 10px; 
-    border: 1px solid #ccc; 
-    text-align: left; 
-    font-size: 18px;
-    }
+td, th {
+  border: 1px solid #ccc;
+  font-size: 18px;
+  padding: 10px;
+  text-align: left;
+}
