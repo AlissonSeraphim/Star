@@ -10,7 +10,8 @@ function AppProvider({ children }) {
   const [comparitionInput, setComparitionInput] = useState('maior que');
   const [numberInput, setNumberInput] = useState(0);
   const [filteredApi, setFilteredApi] = useState([]);
-  const [isFiltered, setFiltred] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(false);
+  const [counterUpdate, setCounterUpdate] = useState(0);
 
   const searchApi = async () => {
     try {
@@ -33,31 +34,67 @@ function AppProvider({ children }) {
   // const switchFilterMode = () => {
   //   isFiltered === 0 ? 1 : 0
   // }
+  const sequentialFilters = useCallback(() => {
+    let refreshFilters = [];
 
-  const filterApi = useCallback(() => {
-    // selectInput case
-    let filtered = [];
-
-    // console.log('fui chamado');
+    console.log('fui chamado sequencial filtros');
     if (comparitionInput === 'maior que') {
-      filtered = apiResult.filter((planet) => planet[selectInput] > Number(numberInput));
-      // console.log('fui chamado maior que');
+      refreshFilters = filteredApi.filter((planet) => (
+        planet[selectInput] > Number(numberInput)));
+      console.log('fui chamado maior que');
     }
 
     if (comparitionInput === 'menor que') {
-      filtered = apiResult.filter((planet) => planet[selectInput] < Number(numberInput));
-      // console.log('fui chamado menor que');
+      refreshFilters = filteredApi.filter((planet) => (
+        planet[selectInput] < Number(numberInput)));
+      console.log('fui chamado menor que');
     }
 
     if (comparitionInput === 'igual a') {
-      filtered = apiResult.filter((planet) => (
+      refreshFilters = filteredApi.filter((planet) => (
         planet[selectInput] === numberInput));
-      // console.log('fui chamado igual a');
+      console.log('fui chamado igual a');
     }
-    setFilteredApi(filtered);
-    setFiltred(true);
-    // console.log(filtered);
-  }, [comparitionInput, selectInput, numberInput, apiResult]);
+    setFilteredApi(refreshFilters);
+    setIsFiltered(true);
+    console.log('filtros sequenciais', refreshFilters);
+  }, [comparitionInput, selectInput, numberInput, filteredApi]);
+
+  const filterApi = useCallback(() => {
+    if (counterUpdate === 0) {
+    // selectInput case
+      let filtered = [];
+      console.log('fui chamado primeiro filtro');
+
+      if (comparitionInput === 'maior que') {
+        filtered = apiResult.filter((planet) => (
+          planet[selectInput] > Number(numberInput)));
+      // console.log('fui chamado maior que');
+      }
+
+      if (comparitionInput === 'menor que') {
+        filtered = apiResult.filter((planet) => (
+          planet[selectInput] < Number(numberInput)));
+      // console.log('fui chamado menor que');
+      }
+
+      if (comparitionInput === 'igual a') {
+        filtered = apiResult.filter((planet) => (
+          planet[selectInput] === numberInput));
+      // console.log('fui chamado igual a');
+      }
+      setFilteredApi(filtered);
+      setIsFiltered(true);
+      setCounterUpdate(counterUpdate + 1);
+      console.log('primeiro filtro', filtered);
+    }
+    if (counterUpdate > 0) { sequentialFilters(); }
+  }, [comparitionInput,
+    selectInput,
+    numberInput,
+    apiResult,
+    counterUpdate,
+    sequentialFilters]);
 
   const values = useMemo(() => ({
     apiResult,
