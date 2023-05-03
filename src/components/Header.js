@@ -11,6 +11,7 @@ function Header() {
     setComparitionInput,
     numberInput,
     setNumberInput,
+    filterApi,
   } = useContext(AppContext);
   return (
     <div>
@@ -66,6 +67,7 @@ function Header() {
         type="button"
         data-testid="button-filter"
         name="filterButton"
+        onClick={ filterApi }
       >
         Filtrar
       </button>
