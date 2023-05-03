@@ -40,10 +40,12 @@ function AppProvider({ children }) {
   const filterOptions = useCallback(() => {
     const filteredOptions = optionsList.filter((each) => each !== selectInput);
     setOptionsList(filteredOptions);
+    setSelectInput(filteredOptions[0]);
   }, [selectInput, optionsList]);
 
   const sequentialFilters = useCallback(() => {
     let refreshFilters = [];
+    console.log('to chegando assim', selectInput);
 
     console.log('fui chamado sequencial filtros');
     if (comparitionInput === 'maior que') {

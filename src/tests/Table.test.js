@@ -1,23 +1,37 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from '../App';
+import AppProvider from '../context/AppProvider';
 import userEvent from '@testing-library/user-event';
+
 
 describe('Testa o componente Table', () => {
   it('Verifica se existe uma tabela com header', () => {
-    render(<App />)
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>
+    )
     const nameColumn = screen.getByText(/name/i)
     expect(nameColumn).toBeInTheDocument();
   });
 
   it('Verifica se existe uma tabela com conteudo e condiz com o primeiro resultado da API - Tatooine', () => {
-    render(<App />)
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>
+    )
     const firstPlanet = screen.getByRole('cell', {  name: /tatooine/i})
     expect(firstPlanet).toBeInTheDocument();
   });
 
   it('Verifica se a procura pelo nome está simultanea', () => {
-    render(<App />)
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>
+    )
     const searchInput = screen.getByRole('textbox', {  name: /pesquise pelo nome:/i})
     userEvent.click(searchInput);
     userEvent.type(searchInput, 'al')
@@ -27,13 +41,17 @@ describe('Testa o componente Table', () => {
   });
 
   it('Verifica se o filtro retorna o planeta correto', () => {
-    render(<App />)
-    const columnFilter = screen.getByTestId('column-filter')
-    userEvent.selectOptions(
-      screen.getByRole('combobox'),
-      screen.getByRole('option', { name: 'diameter' }),
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>
     )
-    expect(screen.getByRole('option', { name: 'diameter' }).selected).toBe(true)
+    const columnFilter = screen.getByTestId('column-filter')
+
+    
+    const selectGet = screen.getAllByRole('combobox')
+    userEvent.selectOptions(selectGet, ['population'])
+    expect(screen.getByRole('option', { name: 'population' }).selected).toBe(true)
 
     const comparisonFilter = screen.getByTestId('comparison-filter')
     const lessThanOption = screen.getByRole('option', { name: 'menor que' })
