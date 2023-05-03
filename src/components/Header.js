@@ -12,7 +12,9 @@ function Header() {
     numberInput,
     setNumberInput,
     filterApi,
+    optionsList,
   } = useContext(AppContext);
+
   return (
     <div>
       <h1> sou o header, STAR WARS </h1>
@@ -34,11 +36,16 @@ function Header() {
           value={ selectInput }
           onChange={ ({ target }) => setSelectInput(target.value) }
         >
-          <option value="population">population</option>
+          {
+            optionsList.map((option, index) => (
+              <option key={ option + index } value={ `${option}` }>{option}</option>
+            ))
+          }
+          {/* <option value="population">population</option>
           <option value="orbital_period">orbital_period</option>
           <option value="diameter">diameter</option>
           <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
+          <option value="surface_water">surface_water</option> */}
         </select>
       </label>
       <label>

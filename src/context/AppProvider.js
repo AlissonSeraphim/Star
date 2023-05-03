@@ -12,6 +12,12 @@ function AppProvider({ children }) {
   const [filteredApi, setFilteredApi] = useState([]);
   const [isFiltered, setIsFiltered] = useState(false);
   const [counterUpdate, setCounterUpdate] = useState(0);
+  const [optionsList, setOptionsList] = useState([
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water']);
 
   const searchApi = async () => {
     try {
@@ -31,9 +37,11 @@ function AppProvider({ children }) {
     searchApi();
   }, []);
 
-  // const switchFilterMode = () => {
-  //   isFiltered === 0 ? 1 : 0
-  // }
+  const filterOptions = useCallback(() => {
+    const filteredOptions = optionsList.filter((each) => each !== selectInput);
+    setOptionsList(filteredOptions);
+  }, [selectInput, optionsList]);
+
   const sequentialFilters = useCallback(() => {
     let refreshFilters = [];
 
@@ -88,13 +96,15 @@ function AppProvider({ children }) {
       setCounterUpdate(counterUpdate + 1);
       console.log('primeiro filtro', filtered);
     }
+    filterOptions();
     if (counterUpdate > 0) { sequentialFilters(); }
   }, [comparitionInput,
     selectInput,
     numberInput,
     apiResult,
     counterUpdate,
-    sequentialFilters]);
+    sequentialFilters,
+    filterOptions]);
 
   const values = useMemo(() => ({
     apiResult,
@@ -109,6 +119,7 @@ function AppProvider({ children }) {
     filterApi,
     filteredApi,
     isFiltered,
+    optionsList,
   }), [apiResult,
     inputValue,
     setInputValue,
@@ -121,6 +132,7 @@ function AppProvider({ children }) {
     filterApi,
     filteredApi,
     isFiltered,
+    optionsList,
   ]);
 
   return (
