@@ -2,13 +2,14 @@ import React, { useContext } from 'react';
 import AppContext from '../context/AppContext';
 
 import './table.css';
+import Header from './Header';
 
 function Table() {
-  const { apiResult } = useContext(AppContext);
+  const { apiResult, inputValue } = useContext(AppContext);
 
   return (
     <div>
-
+      <Header />
       <table>
         <thead>
           <tr>
@@ -17,25 +18,40 @@ function Table() {
             ))}
           </tr>
         </thead>
-        {apiResult.length > 0 && apiResult.map((planet, index) => (
-          <tbody key={ index }>
-            <tr>
-              <td>{ planet.name }</td>
-              <td>{ planet.rotation_period }</td>
-              <td>{ planet.orbital_period }</td>
-              <td>{ planet.diameter }</td>
-              <td>{ planet.climate}</td>
-              <td>{ planet.gravity }</td>
-              <td>{ planet.terrain }</td>
-              <td>{ planet.surface_water }</td>
-              <td>{ planet.population }</td>
-              <td>{ planet.films}</td>
-              <td>{ planet.created }</td>
-              <td>{ planet.edited }</td>
-              <td>{ planet.url }</td>
-            </tr>
-          </tbody>
-        ))}
+        {apiResult.length > 0 && (
+          apiResult.filter(
+            (planet) => (planet.name.toLowerCase().includes(inputValue.toLowerCase())),
+          )
+            .map((planet, index) => (
+              <tbody key={ planet + index }>
+                <tr>
+                  <td>{ planet.name }</td>
+                  <td>{ planet.rotation_period }</td>
+                  <td>{ planet.orbital_period }</td>
+                  <td>{ planet.diameter }</td>
+                  <td>{ planet.climate}</td>
+                  <td>{ planet.gravity }</td>
+                  <td>{ planet.terrain }</td>
+                  <td>{ planet.surface_water }</td>
+                  <td>{ planet.population }</td>
+                  <td>
+                    { planet.films.map(
+                      (link) => (
+                        <span key={ link + index }>
+                          {' '}
+                          { link }
+                          {' '}
+                        </span>),
+                    )}
+
+                  </td>
+                  <td>{ planet.created }</td>
+                  <td>{ planet.edited }</td>
+                  <td>{ planet.url }</td>
+                </tr>
+              </tbody>
+            )))}
+
       </table>
     </div>
 
