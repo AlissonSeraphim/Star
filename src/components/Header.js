@@ -13,7 +13,19 @@ function Header() {
     setNumberInput,
     filterApi,
     optionsList,
+    filtersUsed,
+    setOptionsList,
+    setFiltersUsed,
+    setCounterUpdate,
+    setIsFiltered,
   } = useContext(AppContext);
+
+  console.log(filtersUsed);
+
+  const clearFilter = (filter) => {
+    setFiltersUsed((prevFilters) => prevFilters.filter((item) => item !== filter));
+    setOptionsList([...optionsList, filter.column]);
+  };
 
   return (
     <div>
@@ -41,11 +53,6 @@ function Header() {
               <option key={ option + index } value={ `${option}` }>{option}</option>
             ))
           }
-          {/* <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option> */}
         </select>
       </label>
       <label>
@@ -77,6 +84,44 @@ function Header() {
         onClick={ filterApi }
       >
         Filtrar
+      </button>
+      {
+        filtersUsed && (
+          filtersUsed.map((each, index) => (
+            <section key={ each.value + index } data-testid="filter">
+              <p>
+                {`${each.column} - ${each.comparition} - ${each.value}` }
+              </p>
+              <button
+                type="button"
+                name="clearFilterButton"
+                onClick={ () => {
+                  clearFilter(each);
+                } }
+              >
+                Clear Filter
+              </button>
+            </section>
+          ))
+        )
+      }
+      <button
+        type="button"
+        data-testid="button-remove-filters"
+        name="removeFilters"
+        onClick={ () => {
+          setCounterUpdate(0);
+          setFiltersUsed([]);
+          setOptionsList([
+            'population',
+            'orbital_period',
+            'diameter',
+            'rotation_period',
+            'surface_water']);
+          setIsFiltered(false);
+        } }
+      >
+        Remover todas filtragens
       </button>
     </div>
   );
