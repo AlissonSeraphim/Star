@@ -24,6 +24,7 @@ function AppProvider({ children }) {
     try {
       const results = await fetch('https://swapi.dev/api/planets');
       const data = await results.json();
+      // console.log(data);
       data.results.forEach((planet) => {
         delete planet.residents;
       });

@@ -2,8 +2,16 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from '../App';
 import AppProvider from '../context/AppProvider';
+import mockPlanets from '../mocks/mockPlanets';
+import userEvent from '@testing-library/user-event';
 
 describe('Testa o componente Header', () => {
+  beforeEach(() => {
+    jest.spyOn(global, 'fetch').mockResolvedValue({
+      json: async () => (mockPlanets),
+    })
+  })
+
   it('Verifica se existe um titulo', () => {
     render(
       <AppProvider>
@@ -59,6 +67,34 @@ describe('Testa o componente Header', () => {
     )
     const filterButton = screen.getByTestId('button-filter')
     expect(filterButton).toBeInTheDocument();
+  })
+
+
+  it('Verifica se existe um botão para limpar todos os filtros', () => {
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>
+    )
+    const CleanAllfiltersButton = screen.getByTestId('button-remove-filters')
+    expect(CleanAllfiltersButton).toBeInTheDocument();
+  })
+
+  it('Verifica se existe um botão para limpar cada filtro', () => {
+    render(
+      <AppProvider>
+        <App />
+      </AppProvider>
+    )
+
+    const valueInput = screen.getByTestId('value-filter');
+    userEvent.type(valueInput, 1000000000)
+
+    const buttonFilter = screen.getByRole('button', {  name: /filtrar/i})
+    userEvent.click(buttonFilter);
+
+    const clearFilterButton = screen.getByRole('button', {  name: /clear filter/i})
+    expect(clearFilterButton).toBeInTheDocument();
   })
 });
 
